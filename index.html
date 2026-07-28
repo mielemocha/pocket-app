@@ -3,30 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <title>予定と記録ツール</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    h2 {
+      margin-top: 32px;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
+
   <h1>予定と記録ツール</h1>
 
-  <section id="schedule-section">
-    <h2>予定を登録</h2>
-    <form id="schedule-form">
-      <input type="text" id="schedule-title" placeholder="タイトル" required>
-      <textarea id="schedule-memo" placeholder="メモ"></textarea>
-      <button type="submit">予定を追加</button>
-    </form>
-  </section>
+  <!-- 予定追加フォーム -->
+  <h2>予定を登録</h2>
+  <form id="schedule-form">
+    <input type="text" id="schedule-title" placeholder="タイトル" required>
+    <textarea id="schedule-memo" placeholder="メモ" required></textarea>
+    <button type="submit">予定を追加</button>
+  </form>
 
-  <section id="schedule-list-section">
-    <h2>予定一覧</h2>
-    <ul id="schedule-list"></ul>
-  </section>
+  <!-- 予定一覧 -->
+  <h2>予定一覧</h2>
+  <ul id="schedule-list"></ul>
 
-  <section id="record-list-section">
-    <h2>記録一覧</h2>
-    <ul id="record-list"></ul>
-  </section>
+  <!-- app.js を読み込む（キャッシュ対策付き） -->
+  <script src="app.js?v=1"></script>
 
-  <script src="app.js"></script>
 </body>
 </html>
