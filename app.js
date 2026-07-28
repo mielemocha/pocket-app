@@ -36,7 +36,7 @@ function loadPlans() {
     list.appendChild(li);
   });
 
-  // 🔥 削除ボタンのイベント登録（ここが正しい場所）
+  // 削除ボタンのイベント登録
   const deleteButtons = document.querySelectorAll(".delete-btn");
   deleteButtons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -66,3 +66,4 @@ form.addEventListener("submit", (e) => {
 window.addEventListener("load", () => {
   loadPlans();
 });
+
