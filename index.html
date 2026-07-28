@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>予定と記録ツール</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>予定と記録ツール</h1>
+
+  <section id="schedule-section">
+    <h2>予定を登録</h2>
+    <form id="schedule-form">
+      <input type="text" id="schedule-title" placeholder="タイトル" required>
+      <textarea id="schedule-memo" placeholder="メモ"></textarea>
+      <button type="submit">予定を追加</button>
+    </form>
+  </section>
+
+  <section id="schedule-list-section">
+    <h2>予定一覧</h2>
+    <ul id="schedule-list"></ul>
+  </section>
+
+  <section id="record-list-section">
+    <h2>記録一覧</h2>
+    <ul id="record-list"></ul>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
