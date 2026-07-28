@@ -11,6 +11,14 @@ function savePlan(title, memo) {
   localStorage.setItem("plans", JSON.stringify(plans));
 }
 
+// 予定を削除する
+function deletePlan(index) {
+  const plans = JSON.parse(localStorage.getItem("plans") || "[]");
+  plans.splice(index, 1); // index の予定を削除
+  localStorage.setItem("plans", JSON.stringify(plans));
+  loadPlans(); // 再描画
+}
+
 // 予定一覧を読み込んで表示する
 function loadPlans() {
   const plans = JSON.parse(localStorage.getItem("plans") || "[]");
@@ -18,13 +26,23 @@ function loadPlans() {
 
   list.innerHTML = ""; // 一度クリア
 
-  plans.forEach(plan => {
+  plans.forEach((plan, index) => {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${plan.title}</strong><br>
-      ${plan.memo}
+      ${plan.memo}<br>
+      <button class="delete-btn" data-index="${index}">削除</button>
     `;
     list.appendChild(li);
+  });
+
+  // 🔥 削除ボタンのイベント登録（ここが正しい場所）
+  const deleteButtons = document.querySelectorAll(".delete-btn");
+  deleteButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = btn.dataset.index;
+      deletePlan(index);
+    });
   });
 }
 

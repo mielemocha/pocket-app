@@ -20,17 +20,37 @@
       font-size: 16px;
     }
     button {
-      padding: 8px 16px;
-      font-size: 16px;
+      padding: 6px 12px;
+      font-size: 14px;
+      margin-top: 6px;
     }
     ul {
       list-style: none;
       padding: 0;
     }
     li {
-      padding: 8px;
+      padding: 12px;
       border-bottom: 1px solid #ccc;
     }
+.delete-btn {
+  background: #ff6666;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.delete-btn:hover {
+  background: #ff4c4c;
+}
+li {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
   </style>
 </head>
 <body>
@@ -49,8 +69,9 @@
   <h2>予定一覧</h2>
   <ul id="schedule-list"></ul>
 
-  <!-- app.js を読み込む（キャッシュ対策付き） -->
-  <script src="app.js?v=1"></script>
+  <!-- app.js（キャッシュ対策付き） -->
+  <script src="app.js?v=3"></script>
+
 
 </body>
 </html>
