@@ -1,4 +1,4 @@
-// 予定を保存する（複数保存できる）
+// 予定を保存する
 function savePlan(title, memo) {
   const plans = JSON.parse(localStorage.getItem("plans") || "[]");
 
@@ -14,9 +14,9 @@ function savePlan(title, memo) {
 // 予定を削除する
 function deletePlan(index) {
   const plans = JSON.parse(localStorage.getItem("plans") || "[]");
-  plans.splice(index, 1); // index の予定を削除
+  plans.splice(index, 1);
   localStorage.setItem("plans", JSON.stringify(plans));
-  loadPlans(); // 再描画
+  loadPlans();
 }
 
 // 予定一覧を読み込んで表示する
@@ -24,29 +24,49 @@ function loadPlans() {
   const plans = JSON.parse(localStorage.getItem("plans") || "[]");
   const list = document.getElementById("schedule-list");
 
-  list.innerHTML = ""; // 一度クリア
+  list.innerHTML = "";
 
   plans.forEach((plan, index) => {
+    const hasMemo = plan.memo && plan.memo.trim() !== "";
+    const memoIcon = hasMemo ? "💬" : "";
+
     const li = document.createElement("li");
+
     li.innerHTML = `
-      <strong>${plan.title}</strong><br>
-      ${plan.memo}<br>
-      <button class="delete-btn" data-index="${index}">削除</button>
+      <span>${plan.title}</span>
+
+      <div class="right-area">
+        <span>${memoIcon}</span>
+        <button class="delete-btn" data-index="${index}">×</button>
+      </div>
     `;
+
     list.appendChild(li);
   });
 
-  // 削除ボタンのイベント登録
+  // 削除ボタンのイベント
   const deleteButtons = document.querySelectorAll(".delete-btn");
   deleteButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      deletePlan(index);
+      deletePlan(btn.dataset.index);
     });
   });
 }
 
-// 予定追加フォームの処理
+// モーダル開閉
+const modalBg = document.getElementById("modal-bg");
+const addButton = document.getElementById("add-button");
+const closeModal = document.getElementById("close-modal");
+
+addButton.addEventListener("click", () => {
+  modalBg.style.display = "flex";
+});
+
+closeModal.addEventListener("click", () => {
+  modalBg.style.display = "none";
+});
+
+// フォーム送信
 const form = document.getElementById("schedule-form");
 const titleInput = document.getElementById("schedule-title");
 const memoInput = document.getElementById("schedule-memo");
@@ -59,11 +79,11 @@ form.addEventListener("submit", (e) => {
   titleInput.value = "";
   memoInput.value = "";
 
-  loadPlans(); // 追加後に一覧を更新
-});
-
-// ページ読み込み時に一覧を復元する
-window.addEventListener("load", () => {
+  modalBg.style.display = "none"; // 保存後に閉じる
   loadPlans();
 });
 
+// ページ読み込み時に一覧を復元
+window.addEventListener("load", () => {
+  loadPlans();
+});
