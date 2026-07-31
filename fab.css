@@ -1,0 +1,119 @@
+/* ========================================
+   Pocket フローティング追加ボタン
+======================================== */
+
+/*
+  下部ナビゲーションとボタンが重ならないよう、
+  アプリ本体の下側に余白を追加する。
+*/
+.app {
+  padding-bottom: calc(150px + env(safe-area-inset-bottom));
+}
+
+/*
+  元の追加ボタンの色を維持しつつ、
+  画面右下に固定する。
+*/
+.floating-add-btn {
+  position: fixed;
+  right: max(20px, calc((100vw - 720px) / 2 + 20px));
+  bottom: calc(82px + env(safe-area-inset-bottom));
+
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0;
+
+  border-radius: 50%;
+
+  font-family: inherit;
+  font-size: 32px;
+  line-height: 1;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+
+  cursor: pointer;
+  z-index: 900;
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.floating-add-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 11px 26px rgba(0, 0, 0, 0.23),
+    0 3px 8px rgba(0, 0, 0, 0.14);
+}
+
+.floating-add-btn:active {
+  transform: scale(0.94);
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.2);
+}
+
+.floating-add-btn:focus-visible {
+  outline: 3px solid rgba(32, 32, 32, 0.25);
+  outline-offset: 4px;
+}
+
+/*
+  モーダルが開いているときは、
+  モーダルより後ろに置く。
+*/
+.modal-bg {
+  z-index: 1000;
+}
+
+/*
+  スマートフォンでは親指で押しやすいサイズにする。
+*/
+@media (max-width: 600px) {
+  .app {
+    padding-bottom: calc(145px + env(safe-area-inset-bottom));
+  }
+
+  .floating-add-btn {
+    right: 18px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+
+    width: 56px;
+    height: 56px;
+
+    font-size: 30px;
+  }
+}
+
+/*
+  画面が横向きで高さが少ない場合は、
+  少し小さくして邪魔になりにくくする。
+*/
+@media (max-height: 520px) {
+  .floating-add-btn {
+    bottom: calc(68px + env(safe-area-inset-bottom));
+
+    width: 50px;
+    height: 50px;
+
+    font-size: 27px;
+  }
+}
+
+/*
+  動きを減らす設定を使っている端末への配慮。
+*/
+@media (prefers-reduced-motion: reduce) {
+  .floating-add-btn {
+    transition: none;
+  }
+}
