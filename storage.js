@@ -225,3 +225,145 @@ function getRecordedPlans() {
     (plan) => plan.record
   );
 }
+/**
+ * Pocketのデータをバックアップ用オブジェクトにまとめる
+ */
+function createBackupData() {
+  return {
+    app: "Pocket",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    plans: getPlans()
+  };
+}
+
+/**
+ * バックアップファイル名に使う日付を作る
+ */
+function getBackupDateString() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+
+  const month = String(
+    now.getMonth() + 1
+  ).padStart(2, "0");
+
+  const day = String(
+    now.getDate()
+  ).padStart(2, "0");
+
+  const hours = String(
+    now.getHours()
+  ).padStart(2, "0");
+
+  const minutes = String(
+    now.getMinutes()
+  ).padStart(2, "0");
+
+  return `${year}-${month}-${day}-${hours}${minutes}`;
+}
+
+/**
+ * PocketのバックアップをJSONファイルとして保存する
+ */
+function exportPocketBackup() {
+  const backupData =
+    createBackupData();
+
+  const jsonText =
+    JSON.stringify(
+      backupData,
+      null,
+      2
+    );
+
+  const backupBlob =
+    new Blob(
+      [jsonText],
+      {
+        type: "application/json"
+      }
+    );
+
+  const backupUrl =
+    URL.createObjectURL(
+      backupBlob
+    );
+
+  const downloadLink =
+    document.createElement("a");
+
+  downloadLink.href =
+    backupUrl;
+
+  downloadLink.download =
+    `pocket-backup-${getBackupDateString()}.json`;
+
+  document.body.appendChild(
+    downloadLink
+  );
+
+  downloadLink.click();
+
+  downloadLink.remove();
+
+  URL.revokeObjectURL(
+    backupUrl
+  );
+}
+/**
+ * 読み込んだデータがPocketのバックアップか確認する
+ */
+function validatePocketBackup(backupData) {
+  if (
+    !backupData ||
+    typeof backupData !== "object"
+  ) {
+    return false;
+  }
+
+  if (backupData.app !== "Pocket") {
+    return false;
+  }
+
+  if (backupData.version !== 1) {
+    return false;
+  }
+
+  if (!Array.isArray(backupData.plans)) {
+    return false;
+  }
+
+  return backupData.plans.every((plan) => {
+    return (
+      plan &&
+      typeof plan === "object" &&
+      typeof plan.title === "string"
+    );
+  });
+}
+
+/**
+ * Pocketのバックアップデータを復元する
+ */
+function importPocketBackup(backupData) {
+  if (!validatePocketBackup(backupData)) {
+    throw new Error(
+      "Pocketのバックアップ形式ではありません。"
+    );
+  }
+
+  savePlans(backupData.plans);
+
+  /*
+   * 古い形式のバックアップでも使えるよう、
+   * getPlans()を通してデータを整える
+   */
+  const normalizedPlans =
+    getPlans();
+
+  savePlans(normalizedPlans);
+
+  return normalizedPlans;
+}

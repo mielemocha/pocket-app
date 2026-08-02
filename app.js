@@ -24,6 +24,49 @@ const archiveNavButton =
   );
 
 const appSubtitle =
+  document.getElementById(
+    "app-subtitle"
+  );
+
+const settingsMenuButton =
+  document.getElementById(
+    "settings-menu-button"
+  );
+
+const settingsMenu =
+  document.getElementById(
+    "settings-menu"
+  );
+
+const versionButton =
+  document.getElementById(
+    "version-button"
+  );
+
+const versionModalBg =
+  document.getElementById(
+    "version-modal-bg"
+  );
+
+const closeVersionModal =
+  document.getElementById(
+    "close-version-modal"
+  );
+
+const exportButton =
+  document.getElementById(
+    "export-button"
+  );
+
+const importButton =
+  document.getElementById(
+    "import-button"
+  );
+
+const importFileInput =
+  document.getElementById(
+    "import-file-input"
+  );
   document.getElementById("app-subtitle");
 
 let currentView = "pocket";
@@ -35,6 +78,7 @@ let draggedPointerId = null;
 let dragStartY = 0;
 let hasDragged = false;
 let suppressPlanClick = false;
+let settingsMenuOpen = false;
 
 /**
  * 予定一覧を表示する
@@ -620,10 +664,258 @@ archiveNavButton.addEventListener(
     showView("archive");
   }
 );
+/**
+ * 設定メニュー
+ */
+settingsMenuButton.addEventListener(
+  "click",
+  (event) => {
+    event.stopPropagation();
 
+    toggleSettingsMenu();
+  }
+);
+
+document.addEventListener(
+  "click",
+  () => {
+    closeSettingsMenu();
+  }
+);
+
+settingsMenu.addEventListener(
+  "click",
+  (event) => {
+    event.stopPropagation();
+  }
+);
+
+/**
+ * バージョン情報
+ */
+versionButton.addEventListener(
+  "click",
+  () => {
+    closeSettingsMenu();
+
+    versionModalBg.classList.remove(
+      "hidden"
+    );
+  }
+);
+
+closeVersionModal.addEventListener(
+  "click",
+  () => {
+    versionModalBg.classList.add(
+      "hidden"
+    );
+  }
+);
+
+versionModalBg.addEventListener(
+  "click",
+  (event) => {
+    if (
+      event.target === versionModalBg
+    ) {
+      versionModalBg.classList.add(
+        "hidden"
+      );
+    }
+  }
+);
+
+/**
+ * バックアップを書き出す
+ */
+exportButton.addEventListener(
+  "click",
+  () => {
+    closeSettingsMenu();
+
+    const plans =
+      getPlans();
+
+    if (plans.length === 0) {
+      const shouldExport =
+        window.confirm(
+          "保存されている予定や記録がありません。\n空のバックアップを書き出しますか？"
+        );
+
+      if (!shouldExport) {
+        return;
+      }
+    }
+
+    exportPocketBackup();
+  }
+);
+/**
+ * インポートするJSONファイルを選ぶ
+ */
+importButton.addEventListener(
+  "click",
+  () => {
+    closeSettingsMenu();
+
+    /*
+     * 同じファイルを続けて選んだ場合でも
+     * changeイベントが動くようにリセットする
+     */
+    importFileInput.value = "";
+
+    importFileInput.click();
+  }
+);
+
+/**
+ * 選ばれたバックアップを読み込む
+ */
+importFileInput.addEventListener(
+  "change",
+  () => {
+    const selectedFile =
+      importFileInput.files[0];
+
+    if (!selectedFile) {
+      return;
+    }
+
+    const fileReader =
+      new FileReader();
+
+    fileReader.addEventListener(
+      "load",
+      () => {
+        try {
+          const backupData =
+            JSON.parse(
+              fileReader.result
+            );
+
+          if (
+            !validatePocketBackup(
+              backupData
+            )
+          ) {
+            window.alert(
+              "このファイルはPocketのバックアップではありません。"
+            );
+
+            return;
+          }
+
+          const currentPlans =
+            getPlans();
+
+          const importedPlans =
+            backupData.plans;
+
+          const confirmationMessage =
+            currentPlans.length > 0
+              ? (
+                  "現在の予定・記録を、" +
+                  "選択したバックアップで置き換えます。\n\n" +
+                  `現在：${currentPlans.length}件\n` +
+                  `復元後：${importedPlans.length}件\n\n` +
+                  "続ける前に、現在のデータを" +
+                  "バックアップしておくことをおすすめします。"
+                )
+              : (
+                  "選択したバックアップを復元します。\n\n" +
+                  `復元するデータ：${importedPlans.length}件`
+                );
+
+          const shouldImport =
+            window.confirm(
+              confirmationMessage
+            );
+
+          if (!shouldImport) {
+            return;
+          }
+
+          importPocketBackup(
+            backupData
+          );
+
+          renderPlans();
+          renderArchive();
+          showView("pocket");
+
+          window.alert(
+            "バックアップを復元しました。"
+          );
+        } catch (error) {
+          console.error(
+            "バックアップの読み込みに失敗しました。",
+            error
+          );
+
+          window.alert(
+            "バックアップを読み込めませんでした。\n" +
+            "ファイルが壊れているか、形式が違う可能性があります。"
+          );
+        } finally {
+          importFileInput.value = "";
+        }
+      }
+    );
+
+    fileReader.addEventListener(
+      "error",
+      () => {
+        window.alert(
+          "ファイルの読み込みに失敗しました。"
+        );
+
+        importFileInput.value = "";
+      }
+    );
+
+    fileReader.readAsText(
+      selectedFile,
+      "UTF-8"
+    );
+  }
+);
 /**
  * 初期表示
  */
+/**
+ * 設定メニュー開閉
+ */
+function toggleSettingsMenu() {
+  settingsMenuOpen =
+    !settingsMenuOpen;
+
+  settingsMenu.classList.toggle(
+    "hidden",
+    !settingsMenuOpen
+  );
+
+  settingsMenuButton.setAttribute(
+    "aria-expanded",
+    settingsMenuOpen
+  );
+}
+
+/**
+ * 設定メニューを閉じる
+ */
+function closeSettingsMenu() {
+  settingsMenuOpen = false;
+
+  settingsMenu.classList.add(
+    "hidden"
+  );
+
+  settingsMenuButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+}
 window.addEventListener(
   "load",
   () => {

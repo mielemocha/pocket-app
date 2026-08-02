@@ -978,3 +978,198 @@ textarea {
     width: 100%;
   }
 }
+/* --------------------
+   上部バー・設定メニュー
+-------------------- */
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 850;
+
+  border-bottom: 1px solid var(--border);
+
+  background:
+    rgba(247, 248, 251, 0.94);
+
+  backdrop-filter: blur(14px);
+}
+
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: min(100% - 32px, 720px);
+  margin: 0 auto;
+  padding: 16px 0 14px;
+}
+
+.app-brand {
+  min-width: 0;
+}
+
+.app-brand h1 {
+  margin: 0;
+}
+
+.settings-area {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.settings-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-sub);
+
+  font-size: 26px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.settings-menu-button:hover {
+  background: var(--surface-soft);
+  color: var(--text-main);
+}
+
+.settings-menu-button:focus-visible {
+  outline:
+    3px solid
+    rgba(82, 118, 216, 0.16);
+
+  outline-offset: 2px;
+}
+
+.settings-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  width: 220px;
+  padding: 8px;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: var(--surface);
+
+  box-shadow:
+    0 14px 40px
+    rgba(26, 31, 44, 0.16);
+
+  transform-origin: top right;
+}
+
+.settings-menu-item {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 44px;
+
+  gap: 12px;
+  padding: 10px 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+  color: var(--text-main);
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-menu-item:hover {
+  background: var(--surface-soft);
+}
+
+.settings-menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+
+  color: var(--text-sub);
+  font-size: 16px;
+}
+
+.settings-menu-divider {
+  height: 1px;
+  margin: 6px 4px;
+
+  background: var(--border);
+}
+
+/* --------------------
+   バージョン情報モーダル
+-------------------- */
+
+.info-modal {
+  width: min(100%, 360px);
+
+  overflow: hidden;
+
+  background: var(--surface);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 20px 60px
+    rgba(20, 24, 35, 0.28);
+}
+
+.info-modal-content {
+  padding: 6px 22px 24px;
+  text-align: center;
+}
+
+.version-number {
+  margin: 0 0 14px;
+
+  color: var(--text-sub);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.version-description {
+  margin: 0;
+
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* --------------------
+   スマートフォン調整
+-------------------- */
+
+@media (max-width: 520px) {
+  .top-bar-inner {
+    width: min(100% - 24px, 720px);
+    padding: 14px 0 12px;
+  }
+
+  .settings-menu {
+    width: min(220px, calc(100vw - 24px));
+  }
+
+  .info-modal {
+    width: calc(100% - 24px);
+    margin-bottom: 12px;
+  }
+}

@@ -10,29 +10,36 @@
 
   <title>Pocket</title>
 
-  <!-- ▼▼▼ ここから PWA 用の追加 ▼▼▼ -->
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
 
-  <!-- iOS Safari 用アイコン（ホーム画面に追加で使われる） -->
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <!-- ▲▲▲ ここまで追加 ▲▲▲ -->
+  <meta
+    name="theme-color"
+    content="#ffffff"
+  >
 
   <link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+  >
+
+  <!-- CSS -->
+  <link
     rel="stylesheet"
-    href="style.css?v=6"
+    href="style.css?v=7"
   >
 
   <link
     rel="stylesheet"
-    href="fab.css?v=1"
+    href="fab.css?v=2"
   >
 </head>
 
 <body>
-  <main class="app">
-    <header class="app-header">
-      <div>
+  <!-- 画面上部バー -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="app-brand">
         <h1>Pocket</h1>
 
         <p
@@ -42,8 +49,86 @@
           予定を入れて、記録としてしまう。
         </p>
       </div>
-    </header>
 
+      <div class="settings-area">
+        <button
+          id="settings-menu-button"
+          class="settings-menu-button"
+          type="button"
+          aria-label="設定メニューを開く"
+          aria-expanded="false"
+          aria-controls="settings-menu"
+        >
+          <span aria-hidden="true">⋮</span>
+        </button>
+
+        <!-- 設定ポップアップ -->
+        <div
+          id="settings-menu"
+          class="settings-menu hidden"
+          role="menu"
+        >
+          <button
+            id="export-button"
+            class="settings-menu-item"
+            type="button"
+            role="menuitem"
+          >
+            <span
+              class="settings-menu-icon"
+              aria-hidden="true"
+            >
+              ↓
+            </span>
+
+            <span>
+              バックアップ
+            </span>
+          </button>
+
+          <button
+            id="import-button"
+            class="settings-menu-item"
+            type="button"
+            role="menuitem"
+          >
+            <span
+              class="settings-menu-icon"
+              aria-hidden="true"
+            >
+              ↑
+            </span>
+
+            <span>
+              インポート
+            </span>
+          </button>
+
+          <div class="settings-menu-divider"></div>
+
+          <button
+            id="version-button"
+            class="settings-menu-item"
+            type="button"
+            role="menuitem"
+          >
+            <span
+              class="settings-menu-icon"
+              aria-hidden="true"
+            >
+              ⓘ
+            </span>
+
+            <span>
+              バージョン情報
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="app">
     <!-- 予定画面 -->
     <section id="pocket-view">
       <h2 class="section-title">
@@ -83,7 +168,10 @@
       <!-- タグ検索 -->
       <div class="archive-search">
         <div class="search-input-area">
-          <span class="search-icon">
+          <span
+            class="search-icon"
+            aria-hidden="true"
+          >
             ⌕
           </span>
 
@@ -153,7 +241,10 @@
       class="bottom-nav-button active"
       type="button"
     >
-      <span class="bottom-nav-icon">
+      <span
+        class="bottom-nav-icon"
+        aria-hidden="true"
+      >
         ○
       </span>
 
@@ -167,7 +258,10 @@
       class="bottom-nav-button"
       type="button"
     >
-      <span class="bottom-nav-icon">
+      <span
+        class="bottom-nav-icon"
+        aria-hidden="true"
+      >
         ▣
       </span>
 
@@ -366,9 +460,57 @@
     </div>
   </div>
 
-  <script src="storage.js?v=6"></script>
-  <script src="modal.js?v=6"></script>
-  <script src="archive.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <!-- バージョン情報モーダル -->
+  <div
+    id="version-modal-bg"
+    class="modal-bg hidden"
+  >
+    <div
+      class="info-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="version-modal-title"
+    >
+      <div class="modal-header">
+        <h2 id="version-modal-title">
+          Pocket
+        </h2>
+
+        <button
+          id="close-version-modal"
+          class="close-btn"
+          type="button"
+          aria-label="閉じる"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="info-modal-content">
+        <p class="version-number">
+          Version 0.1.0
+        </p>
+
+        <p class="version-description">
+          予定をポケットに入れ、<br>
+          終わったら記録としてしまうアプリ。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- インポート用ファイル選択 -->
+  <input
+    type="file"
+    id="import-file-input"
+    class="hidden"
+    accept=".json,application/json"
+  >
+
+  <!-- JavaScript -->
+  <script src="storage.js?v=7"></script>
+  <script src="modal.js?v=7"></script>
+  <script src="archive.js?v=7"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
