@@ -11,7 +11,10 @@
   <title>Pocket</title>
 
   <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
 
   <meta
     name="theme-color"
@@ -24,15 +27,8 @@
   >
 
   <!-- CSS -->
-  <link
-    rel="stylesheet"
-    href="style.css?v=7"
-  >
-
-  <link
-    rel="stylesheet"
-    href="fab.css?v=2"
-  >
+  <link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/fab.css?v=2">
 </head>
 
 <body>
@@ -59,7 +55,9 @@
           aria-expanded="false"
           aria-controls="settings-menu"
         >
-          <span aria-hidden="true">⋮</span>
+          <span aria-hidden="true">
+            ⋮
+          </span>
         </button>
 
         <!-- 設定ポップアップ -->
@@ -104,7 +102,10 @@
             </span>
           </button>
 
-          <div class="settings-menu-divider"></div>
+          <div
+            class="settings-menu-divider"
+            aria-hidden="true"
+          ></div>
 
           <button
             id="version-button"
@@ -128,6 +129,7 @@
     </div>
   </header>
 
+  <!-- メイン画面 -->
   <main class="app">
     <!-- 予定画面 -->
     <section id="pocket-view">
@@ -228,7 +230,9 @@
     aria-label="予定を追加"
     title="予定を追加"
   >
-    <span aria-hidden="true">＋</span>
+    <span aria-hidden="true">
+      ＋
+    </span>
   </button>
 
   <!-- 画面下部ナビゲーション -->
@@ -271,7 +275,7 @@
     </button>
   </nav>
 
-  <!-- 共通モーダル -->
+  <!-- 予定・記録 共通モーダル -->
   <div
     id="modal-bg"
     class="modal-bg hidden"
@@ -380,6 +384,7 @@
             ></p>
           </div>
 
+          <!-- 写真 -->
           <label for="record-photo">
             写真
           </label>
@@ -390,6 +395,7 @@
             accept="image/*"
           >
 
+          <!-- 選択中の写真プレビュー -->
           <div
             id="photo-preview-area"
             class="photo-preview-area hidden"
@@ -410,6 +416,7 @@
             </button>
           </div>
 
+          <!-- 既存記録の写真名 -->
           <p
             id="current-photo-name"
             class="current-photo-name hidden"
@@ -488,7 +495,7 @@
 
       <div class="info-modal-content">
         <p class="version-number">
-          Version 0.1.0
+          Version 1.1.0 β
         </p>
 
         <p class="version-description">
@@ -508,9 +515,9 @@
   >
 
   <!-- JavaScript -->
-  <script src="storage.js?v=7"></script>
-  <script src="modal.js?v=7"></script>
-  <script src="archive.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="js/storage/storage.js?v=8"></script>
+<script src="js/modal/modal.js?v=9"></script>
+  <script src="js/archive/archive.js?v=8"></script>
+  <script src="js/app.js?v=8"></script>
 </body>
 </html>

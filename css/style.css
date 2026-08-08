@@ -574,7 +574,17 @@ h1 {
       #e8ebf3
     );
 }
+.archive-photo-image {
+  display: block;
 
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  background: #ffffff;
+}
 .archive-photo-placeholder {
   display: flex;
   width: 100%;
@@ -898,8 +908,10 @@ textarea {
 .photo-preview {
   display: block;
 
-  width: 100%;
-  aspect-ratio: 1 / 1;
+  width: 160px;
+  height: 160px;
+
+  max-width: 100%;
 
   border: 1px solid var(--border);
   border-radius: 14px;

@@ -178,6 +178,24 @@ function showSelectedPhotoPreview(file) {
 }
 
 /**
+ * 保存済みの写真をプレビューする
+ */
+function showSavedPhotoPreview(photoData) {
+  clearPhotoPreview();
+
+  if (!photoData) {
+    return;
+  }
+
+  photoPreview.src =
+    photoData;
+
+  photoPreviewArea.classList.remove(
+    "hidden"
+  );
+}
+
+/**
  * モーダルの入力内容を初期化する
  */
 function resetModalForms() {
@@ -277,6 +295,20 @@ function openEditPlanModal(
         "hidden"
       );
     }
+    if (plan.record.photoName) {
+  currentPhotoName.textContent =
+    `登録済みの写真：${plan.record.photoName}`;
+
+  currentPhotoName.classList.remove(
+    "hidden"
+  );
+}
+
+if (plan.record.photoData) {
+  showSavedPhotoPreview(
+    plan.record.photoData
+  );
+}
   }
 
   recordTab.disabled = false;

@@ -405,6 +405,99 @@ function renderWeekTabs(records) {
 }
 
 /**
+ * Archiveの写真部分を作る
+ */
+function createArchivePhoto(plan) {
+  if (
+    !plan.record.photoData &&
+    !plan.record.photoName
+  ) {
+    return null;
+  }
+
+  const photoFrame =
+    document.createElement(
+      "div"
+    );
+
+  photoFrame.className =
+    "archive-photo-frame";
+
+  if (plan.record.photoData) {
+    const photoImage =
+      document.createElement(
+        "img"
+      );
+
+    photoImage.className =
+      "archive-photo-image";
+
+    photoImage.src =
+      plan.record.photoData;
+
+    photoImage.alt =
+      `${plan.title}の記録写真`;
+
+    photoImage.loading =
+      "lazy";
+
+    photoFrame.appendChild(
+      photoImage
+    );
+
+    return photoFrame;
+  }
+
+  /*
+   * 以前の記録は画像本体を持っていないため、
+   * ファイル名だけ表示する
+   */
+  const placeholder =
+    document.createElement(
+      "div"
+    );
+
+  placeholder.className =
+    "archive-photo-placeholder";
+
+  const icon =
+    document.createElement(
+      "span"
+    );
+
+  icon.className =
+    "archive-photo-icon";
+
+  icon.textContent =
+    "📷";
+
+  const filename =
+    document.createElement(
+      "span"
+    );
+
+  filename.className =
+    "archive-photo-filename";
+
+  filename.textContent =
+    plan.record.photoName;
+
+  placeholder.appendChild(
+    icon
+  );
+
+  placeholder.appendChild(
+    filename
+  );
+
+  photoFrame.appendChild(
+    placeholder
+  );
+
+  return photoFrame;
+}
+
+/**
  * Archiveカードを作成する
  */
 function createArchiveCard(plan) {
@@ -454,10 +547,17 @@ function createArchiveCard(plan) {
       plan.record.date
     );
 
-  header.appendChild(title);
-  header.appendChild(date);
+  header.appendChild(
+    title
+  );
 
-  card.appendChild(header);
+  header.appendChild(
+    date
+  );
+
+  card.appendChild(
+    header
+  );
 
   const body =
     document.createElement(
@@ -512,60 +612,25 @@ function createArchiveCard(plan) {
     text.textContent =
       plan.memo;
 
-    planMemo.appendChild(label);
-    planMemo.appendChild(text);
+    planMemo.appendChild(
+      label
+    );
 
-    body.appendChild(planMemo);
-  }
-
-  if (plan.record.photoName) {
-    const photoFrame =
-      document.createElement(
-        "div"
-      );
-
-    photoFrame.className =
-      "archive-photo-frame";
-
-    const placeholder =
-      document.createElement(
-        "div"
-      );
-
-    placeholder.className =
-      "archive-photo-placeholder";
-
-    const icon =
-      document.createElement(
-        "span"
-      );
-
-    icon.className =
-      "archive-photo-icon";
-
-    icon.textContent =
-      "📷";
-
-    const filename =
-      document.createElement(
-        "span"
-      );
-
-    filename.className =
-      "archive-photo-filename";
-
-    filename.textContent =
-      plan.record.photoName;
-
-    placeholder.appendChild(icon);
-    placeholder.appendChild(filename);
-
-    photoFrame.appendChild(
-      placeholder
+    planMemo.appendChild(
+      text
     );
 
     body.appendChild(
-      photoFrame
+      planMemo
+    );
+  }
+
+  const photoElement =
+    createArchivePhoto(plan);
+
+  if (photoElement) {
+    body.appendChild(
+      photoElement
     );
   }
 
@@ -600,10 +665,14 @@ function createArchiveCard(plan) {
       }
     );
 
-    body.appendChild(tagsArea);
+    body.appendChild(
+      tagsArea
+    );
   }
 
-  card.appendChild(body);
+  card.appendChild(
+    body
+  );
 
   return card;
 }

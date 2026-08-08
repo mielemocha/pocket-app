@@ -67,7 +67,6 @@ const importFileInput =
   document.getElementById(
     "import-file-input"
   );
-  document.getElementById("app-subtitle");
 
 let currentView = "pocket";
 
@@ -597,13 +596,124 @@ scheduleForm.addEventListener(
     renderArchive();
   }
 );
+/**
+ * 写真を縮小してBase64形式へ変換する
+ */
+function convertPhotoToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      resolve("");
+      return;
+    }
 
+    if (!file.type.startsWith("image/")) {
+      reject(
+        new Error(
+          "選択されたファイルは画像ではありません。"
+        )
+      );
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      const image = new Image();
+
+      image.addEventListener("load", () => {
+        /*
+         * localStorageの容量を節約するため、
+         * 長辺を最大900pxに縮小する。
+         */
+        const maxSize = 900;
+
+        let width = image.naturalWidth;
+        let height = image.naturalHeight;
+
+        if (
+          width > maxSize ||
+          height > maxSize
+        ) {
+          const scale = Math.min(
+            maxSize / width,
+            maxSize / height
+          );
+
+          width = Math.round(
+            width * scale
+          );
+
+          height = Math.round(
+            height * scale
+          );
+        }
+
+        const canvas =
+          document.createElement("canvas");
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const context =
+          canvas.getContext("2d");
+
+        if (!context) {
+          reject(
+            new Error(
+              "画像を処理できませんでした。"
+            )
+          );
+          return;
+        }
+
+        context.drawImage(
+          image,
+          0,
+          0,
+          width,
+          height
+        );
+
+        /*
+         * JPEG・品質0.72で圧縮する。
+         */
+        const photoData =
+          canvas.toDataURL(
+            "image/jpeg",
+            0.72
+          );
+
+        resolve(photoData);
+      });
+
+      image.addEventListener("error", () => {
+        reject(
+          new Error(
+            "画像を読み込めませんでした。"
+          )
+        );
+      });
+
+      image.src = reader.result;
+    });
+
+    reader.addEventListener("error", () => {
+      reject(
+        new Error(
+          "写真ファイルを読み込めませんでした。"
+        )
+      );
+    });
+
+    reader.readAsDataURL(file);
+  });
+}
 /**
  * 記録フォーム保存
  */
 recordForm.addEventListener(
   "submit",
-  (event) => {
+  async (event) => {
     event.preventDefault();
 
     const activePlanId =
@@ -624,27 +734,51 @@ recordForm.addEventListener(
     const selectedPhoto =
       recordPhotoInput.files[0];
 
-    saveRecord(
-      activePlanId,
-      {
-        memo:
-          recordMemoInput.value,
-        tags,
-        date:
-          recordDateInput.value,
-        photoName:
-          selectedPhoto
-            ? selectedPhoto.name
-            : ""
-      }
-    );
+    try {
+      const photoData =
+        selectedPhoto
+          ? await convertPhotoToDataUrl(
+              selectedPhoto
+            )
+          : "";
 
-    closeModal();
+      saveRecord(
+        activePlanId,
+        {
+          memo:
+            recordMemoInput.value,
 
-    renderPlans();
-    renderArchive();
+          tags,
 
-    showView("archive");
+          date:
+            recordDateInput.value,
+
+          photoName:
+            selectedPhoto
+              ? selectedPhoto.name
+              : "",
+
+          photoData
+        }
+      );
+
+      closeModal();
+
+      renderPlans();
+      renderArchive();
+
+      showView("archive");
+    } catch (error) {
+      console.error(
+        "写真の保存に失敗しました。",
+        error
+      );
+
+      window.alert(
+        "写真を保存できませんでした。\n" +
+        "別の画像を選ぶか、容量の小さい画像を試してください。"
+      );
+    }
   }
 );
 
