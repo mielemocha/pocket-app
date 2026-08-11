@@ -1,17 +1,27 @@
 const addButton =
-  document.getElementById("add-button");
+  document.getElementById(
+    "add-button"
+  );
 
 const scheduleList =
-  document.getElementById("schedule-list");
+  document.getElementById(
+    "schedule-list"
+  );
 
 const emptyMessage =
-  document.getElementById("empty-message");
+  document.getElementById(
+    "empty-message"
+  );
 
 const pocketView =
-  document.getElementById("pocket-view");
+  document.getElementById(
+    "pocket-view"
+  );
 
 const archiveView =
-  document.getElementById("archive-view");
+  document.getElementById(
+    "archive-view"
+  );
 
 const pocketNavButton =
   document.getElementById(
@@ -26,31 +36,6 @@ const archiveNavButton =
 const appSubtitle =
   document.getElementById(
     "app-subtitle"
-  );
-
-const settingsMenuButton =
-  document.getElementById(
-    "settings-menu-button"
-  );
-
-const settingsMenu =
-  document.getElementById(
-    "settings-menu"
-  );
-
-const versionButton =
-  document.getElementById(
-    "version-button"
-  );
-
-const versionModalBg =
-  document.getElementById(
-    "version-modal-bg"
-  );
-
-const closeVersionModal =
-  document.getElementById(
-    "close-version-modal"
   );
 
 const exportButton =
@@ -77,7 +62,6 @@ let draggedPointerId = null;
 let dragStartY = 0;
 let hasDragged = false;
 let suppressPlanClick = false;
-let settingsMenuOpen = false;
 
 /**
  * 予定一覧を表示する
@@ -88,109 +72,125 @@ function renderPlans() {
 
   scheduleList.innerHTML = "";
 
-  activePlans.forEach((plan) => {
-    const listItem =
-      document.createElement("li");
+  activePlans.forEach(
+    (plan) => {
+      const listItem =
+        document.createElement(
+          "li"
+        );
 
-    listItem.className =
-      "schedule-item";
+      listItem.className =
+        "schedule-item";
 
-    listItem.dataset.id =
-      plan.id;
+      listItem.dataset.id =
+        plan.id;
 
-    const dragHandle =
-      document.createElement("button");
+      const dragHandle =
+        document.createElement(
+          "button"
+        );
 
-    dragHandle.className =
-      "drag-handle";
+      dragHandle.className =
+        "drag-handle";
 
-    dragHandle.type =
-      "button";
+      dragHandle.type =
+        "button";
 
-    dragHandle.textContent =
-      "≡";
+      dragHandle.textContent =
+        "≡";
 
-    dragHandle.setAttribute(
-      "aria-label",
-      `${plan.title}を並び替える`
-    );
+      dragHandle.setAttribute(
+        "aria-label",
+        `${plan.title}を並び替える`
+      );
 
-    dragHandle.title =
-      "ドラッグして並び替え";
+      dragHandle.title =
+        "ドラッグして並び替え";
 
-    const title =
-      document.createElement("span");
+      const title =
+        document.createElement(
+          "span"
+        );
 
-    title.className =
-      "plan-title";
+      title.className =
+        "plan-title";
 
-    title.textContent =
-      plan.title;
+      title.textContent =
+        plan.title;
 
-    const actions =
-      document.createElement("div");
+      const actions =
+        document.createElement(
+          "div"
+        );
 
-    actions.className =
-      "plan-actions";
+      actions.className =
+        "plan-actions";
 
-    if (plan.memo.trim() !== "") {
-      const memoIcon =
-        document.createElement("span");
+      if (
+        plan.memo.trim() !== ""
+      ) {
+        const memoIcon =
+          document.createElement(
+            "span"
+          );
 
-      memoIcon.className =
-        "memo-icon";
+        memoIcon.className =
+          "memo-icon";
 
-      memoIcon.textContent =
-        "💬";
+        memoIcon.textContent =
+          "💬";
 
-      memoIcon.title =
-        "予定メモあり";
+        memoIcon.title =
+          "予定メモあり";
+
+        actions.appendChild(
+          memoIcon
+        );
+      }
+
+      const deleteButton =
+        document.createElement(
+          "button"
+        );
+
+      deleteButton.className =
+        "delete-btn";
+
+      deleteButton.type =
+        "button";
+
+      deleteButton.textContent =
+        "×";
+
+      deleteButton.dataset.id =
+        plan.id;
+
+      deleteButton.setAttribute(
+        "aria-label",
+        `${plan.title}を削除`
+      );
 
       actions.appendChild(
-        memoIcon
+        deleteButton
+      );
+
+      listItem.appendChild(
+        dragHandle
+      );
+
+      listItem.appendChild(
+        title
+      );
+
+      listItem.appendChild(
+        actions
+      );
+
+      scheduleList.appendChild(
+        listItem
       );
     }
-
-    const deleteButton =
-      document.createElement("button");
-
-    deleteButton.className =
-      "delete-btn";
-
-    deleteButton.type =
-      "button";
-
-    deleteButton.textContent =
-      "×";
-
-    deleteButton.dataset.id =
-      plan.id;
-
-    deleteButton.setAttribute(
-      "aria-label",
-      `${plan.title}を削除`
-    );
-
-    actions.appendChild(
-      deleteButton
-    );
-
-    listItem.appendChild(
-      dragHandle
-    );
-
-    listItem.appendChild(
-      title
-    );
-
-    listItem.appendChild(
-      actions
-    );
-
-    scheduleList.appendChild(
-      listItem
-    );
-  });
+  );
 
   emptyMessage.classList.toggle(
     "visible",
@@ -243,7 +243,8 @@ function showView(viewName) {
 }
 
 /**
- * ポインター位置から挿入先を取得する
+ * ポインター位置から
+ * 挿入先を取得する
  */
 function getInsertTarget(pointerY) {
   const items = [
@@ -257,7 +258,8 @@ function getInsertTarget(pointerY) {
       item.getBoundingClientRect();
 
     const middle =
-      rect.top + rect.height / 2;
+      rect.top +
+      rect.height / 2;
 
     if (pointerY < middle) {
       return item;
@@ -275,7 +277,10 @@ function saveCurrentPlanOrder() {
     ...scheduleList.querySelectorAll(
       ".schedule-item"
     )
-  ].map((item) => item.dataset.id);
+  ].map(
+    (item) =>
+      item.dataset.id
+  );
 
   reorderActivePlans(
     orderedPlanIds
@@ -364,23 +369,22 @@ scheduleList.addEventListener(
 
 /**
  * ドラッグ中
- *
- * scheduleListではなくdocumentで受け取るため、
- * 指やマウスが一覧から少し外れても追跡できる
  */
 document.addEventListener(
   "pointermove",
   (event) => {
     if (
       !draggedItem ||
-      event.pointerId !== draggedPointerId
+      event.pointerId !==
+        draggedPointerId
     ) {
       return;
     }
 
     const movedDistance =
       Math.abs(
-        event.clientY - dragStartY
+        event.clientY -
+        dragStartY
       );
 
     if (movedDistance < 5) {
@@ -422,7 +426,8 @@ function finishDragging(event) {
 
   if (
     event &&
-    event.pointerId !== draggedPointerId
+    event.pointerId !==
+      draggedPointerId
   ) {
     return;
   }
@@ -457,9 +462,12 @@ function finishDragging(event) {
 
     suppressPlanClick = true;
 
-    window.setTimeout(() => {
-      suppressPlanClick = false;
-    }, 200);
+    window.setTimeout(
+      () => {
+        suppressPlanClick = false;
+      },
+      200
+    );
   }
 
   resetDragState();
@@ -494,6 +502,7 @@ scheduleList.addEventListener(
     if (suppressPlanClick) {
       event.preventDefault();
       event.stopPropagation();
+
       return;
     }
 
@@ -505,6 +514,7 @@ scheduleList.addEventListener(
     if (dragHandle) {
       event.preventDefault();
       event.stopPropagation();
+
       return;
     }
 
@@ -565,10 +575,14 @@ scheduleForm.addEventListener(
     event.preventDefault();
 
     const title =
-      scheduleTitleInput.value.trim();
+      scheduleTitleInput
+        .value
+        .trim();
 
     const memo =
-      scheduleMemoInput.value.trim();
+      scheduleMemoInput
+        .value
+        .trim();
 
     if (!title) {
       return;
@@ -596,118 +610,154 @@ scheduleForm.addEventListener(
     renderArchive();
   }
 );
+
 /**
- * 写真を縮小してBase64形式へ変換する
+ * 写真を縮小して
+ * Base64形式へ変換する
  */
 function convertPhotoToDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    if (!file) {
-      resolve("");
-      return;
-    }
+  return new Promise(
+    (resolve, reject) => {
+      if (!file) {
+        resolve("");
+        return;
+      }
 
-    if (!file.type.startsWith("image/")) {
-      reject(
-        new Error(
-          "選択されたファイルは画像ではありません。"
+      if (
+        !file.type.startsWith(
+          "image/"
         )
-      );
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.addEventListener("load", () => {
-      const image = new Image();
-
-      image.addEventListener("load", () => {
-        /*
-         * localStorageの容量を節約するため、
-         * 長辺を最大900pxに縮小する。
-         */
-        const maxSize = 900;
-
-        let width = image.naturalWidth;
-        let height = image.naturalHeight;
-
-        if (
-          width > maxSize ||
-          height > maxSize
-        ) {
-          const scale = Math.min(
-            maxSize / width,
-            maxSize / height
-          );
-
-          width = Math.round(
-            width * scale
-          );
-
-          height = Math.round(
-            height * scale
-          );
-        }
-
-        const canvas =
-          document.createElement("canvas");
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const context =
-          canvas.getContext("2d");
-
-        if (!context) {
-          reject(
-            new Error(
-              "画像を処理できませんでした。"
-            )
-          );
-          return;
-        }
-
-        context.drawImage(
-          image,
-          0,
-          0,
-          width,
-          height
-        );
-
-        /*
-         * JPEG・品質0.72で圧縮する。
-         */
-        const photoData =
-          canvas.toDataURL(
-            "image/jpeg",
-            0.72
-          );
-
-        resolve(photoData);
-      });
-
-      image.addEventListener("error", () => {
+      ) {
         reject(
           new Error(
-            "画像を読み込めませんでした。"
+            "選択されたファイルは画像ではありません。"
           )
         );
-      });
 
-      image.src = reader.result;
-    });
+        return;
+      }
 
-    reader.addEventListener("error", () => {
-      reject(
-        new Error(
-          "写真ファイルを読み込めませんでした。"
-        )
+      const reader =
+        new FileReader();
+
+      reader.addEventListener(
+        "load",
+        () => {
+          const image =
+            new Image();
+
+          image.addEventListener(
+            "load",
+            () => {
+              const maxSize = 900;
+
+              let width =
+                image.naturalWidth;
+
+              let height =
+                image.naturalHeight;
+
+              if (
+                width > maxSize ||
+                height > maxSize
+              ) {
+                const scale =
+                  Math.min(
+                    maxSize / width,
+                    maxSize / height
+                  );
+
+                width =
+                  Math.round(
+                    width * scale
+                  );
+
+                height =
+                  Math.round(
+                    height * scale
+                  );
+              }
+
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+              canvas.width =
+                width;
+
+              canvas.height =
+                height;
+
+              const context =
+                canvas.getContext(
+                  "2d"
+                );
+
+              if (!context) {
+                reject(
+                  new Error(
+                    "画像を処理できませんでした。"
+                  )
+                );
+
+                return;
+              }
+
+              context.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+              );
+
+              const photoData =
+                canvas.toDataURL(
+                  "image/jpeg",
+                  0.72
+                );
+
+              resolve(
+                photoData
+              );
+            }
+          );
+
+          image.addEventListener(
+            "error",
+            () => {
+              reject(
+                new Error(
+                  "画像を読み込めませんでした。"
+                )
+              );
+            }
+          );
+
+          image.src =
+            reader.result;
+        }
       );
-    });
 
-    reader.readAsDataURL(file);
-  });
+      reader.addEventListener(
+        "error",
+        () => {
+          reject(
+            new Error(
+              "写真ファイルを読み込めませんでした。"
+            )
+          );
+        }
+      );
+
+      reader.readAsDataURL(
+        file
+      );
+    }
+  );
 }
+
 /**
  * 記録フォーム保存
  */
@@ -726,8 +776,9 @@ recordForm.addEventListener(
     const tags =
       recordTagsInput.value
         .split(",")
-        .map((tag) =>
-          tag.trim()
+        .map(
+          (tag) =>
+            tag.trim()
         )
         .filter(Boolean);
 
@@ -767,7 +818,9 @@ recordForm.addEventListener(
       renderPlans();
       renderArchive();
 
-      showView("archive");
+      showView(
+        "archive"
+      );
     } catch (error) {
       console.error(
         "写真の保存に失敗しました。",
@@ -788,75 +841,18 @@ recordForm.addEventListener(
 pocketNavButton.addEventListener(
   "click",
   () => {
-    showView("pocket");
+    showView(
+      "pocket"
+    );
   }
 );
 
 archiveNavButton.addEventListener(
   "click",
   () => {
-    showView("archive");
-  }
-);
-/**
- * 設定メニュー
- */
-settingsMenuButton.addEventListener(
-  "click",
-  (event) => {
-    event.stopPropagation();
-
-    toggleSettingsMenu();
-  }
-);
-
-document.addEventListener(
-  "click",
-  () => {
-    closeSettingsMenu();
-  }
-);
-
-settingsMenu.addEventListener(
-  "click",
-  (event) => {
-    event.stopPropagation();
-  }
-);
-
-/**
- * バージョン情報
- */
-versionButton.addEventListener(
-  "click",
-  () => {
-    closeSettingsMenu();
-
-    versionModalBg.classList.remove(
-      "hidden"
+    showView(
+      "archive"
     );
-  }
-);
-
-closeVersionModal.addEventListener(
-  "click",
-  () => {
-    versionModalBg.classList.add(
-      "hidden"
-    );
-  }
-);
-
-versionModalBg.addEventListener(
-  "click",
-  (event) => {
-    if (
-      event.target === versionModalBg
-    ) {
-      versionModalBg.classList.add(
-        "hidden"
-      );
-    }
   }
 );
 
@@ -871,10 +867,13 @@ exportButton.addEventListener(
     const plans =
       getPlans();
 
-    if (plans.length === 0) {
+    if (
+      plans.length === 0
+    ) {
       const shouldExport =
         window.confirm(
-          "保存されている予定や記録がありません。\n空のバックアップを書き出しますか？"
+          "保存されている予定や記録がありません。\n" +
+          "空のバックアップを書き出しますか？"
         );
 
       if (!shouldExport) {
@@ -885,6 +884,7 @@ exportButton.addEventListener(
     exportPocketBackup();
   }
 );
+
 /**
  * インポートするJSONファイルを選ぶ
  */
@@ -894,10 +894,11 @@ importButton.addEventListener(
     closeSettingsMenu();
 
     /*
-     * 同じファイルを続けて選んだ場合でも
-     * changeイベントが動くようにリセットする
+     * 同じファイルを続けて選んでも
+     * changeイベントが動くようにする
      */
-    importFileInput.value = "";
+    importFileInput.value =
+      "";
 
     importFileInput.click();
   }
@@ -976,7 +977,10 @@ importFileInput.addEventListener(
 
           renderPlans();
           renderArchive();
-          showView("pocket");
+
+          showView(
+            "pocket"
+          );
 
           window.alert(
             "バックアップを復元しました。"
@@ -992,7 +996,8 @@ importFileInput.addEventListener(
             "ファイルが壊れているか、形式が違う可能性があります。"
           );
         } finally {
-          importFileInput.value = "";
+          importFileInput.value =
+            "";
         }
       }
     );
@@ -1004,7 +1009,8 @@ importFileInput.addEventListener(
           "ファイルの読み込みに失敗しました。"
         );
 
-        importFileInput.value = "";
+        importFileInput.value =
+          "";
       }
     );
 
@@ -1014,42 +1020,10 @@ importFileInput.addEventListener(
     );
   }
 );
+
 /**
  * 初期表示
  */
-/**
- * 設定メニュー開閉
- */
-function toggleSettingsMenu() {
-  settingsMenuOpen =
-    !settingsMenuOpen;
-
-  settingsMenu.classList.toggle(
-    "hidden",
-    !settingsMenuOpen
-  );
-
-  settingsMenuButton.setAttribute(
-    "aria-expanded",
-    settingsMenuOpen
-  );
-}
-
-/**
- * 設定メニューを閉じる
- */
-function closeSettingsMenu() {
-  settingsMenuOpen = false;
-
-  settingsMenu.classList.add(
-    "hidden"
-  );
-
-  settingsMenuButton.setAttribute(
-    "aria-expanded",
-    "false"
-  );
-}
 window.addEventListener(
   "load",
   () => {
@@ -1058,6 +1032,8 @@ window.addEventListener(
     renderPlans();
     renderArchive();
 
-    showView("pocket");
+    showView(
+      "pocket"
+    );
   }
 );
