@@ -100,11 +100,12 @@ function savePlans(plans) {
 
 /**
  * 新しい予定を追加する
+ * 新しい予定は一覧の先頭に入れる
  */
 function createPlan(title, memo) {
   const plans = getPlans();
 
-  plans.push({
+  const newPlan = {
     id:
       crypto.randomUUID(),
 
@@ -119,7 +120,11 @@ function createPlan(title, memo) {
 
     record:
       null
-  });
+  };
+
+  plans.unshift(
+    newPlan
+  );
 
   savePlans(plans);
 }

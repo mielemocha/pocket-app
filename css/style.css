@@ -171,7 +171,6 @@ h1 {
 
   transform: scale(1.015);
 }
-
 .drag-handle {
   display: flex;
   flex: 0 0 auto;
@@ -190,15 +189,17 @@ h1 {
   font-size: 21px;
 
   cursor: grab;
+
   touch-action: none;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  -webkit-touch-callout: none;
 }
 
 .drag-handle:active {
   cursor: grabbing;
-}
-
-.drag-handle:hover {
-  color: var(--primary);
 }
 
 .plan-title {
@@ -1184,4 +1185,15 @@ textarea {
     width: calc(100% - 24px);
     margin-bottom: 12px;
   }
+}
+
+.schedule-item,
+.schedule-item * {
+  -webkit-touch-callout: none;
+}
+
+body.is-reordering,
+body.is-reordering * {
+  user-select: none;
+  -webkit-user-select: none;
 }
