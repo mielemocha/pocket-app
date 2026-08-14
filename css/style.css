@@ -239,10 +239,25 @@ h1 {
   font-size: 22px;
 
   cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
-.delete-btn:hover {
-  color: var(--danger);
+/* マウス操作できる端末だけホバーで赤くする */
+@media (hover: hover) and (pointer: fine) {
+  .delete-btn:hover {
+    color: var(--danger);
+  }
+}
+
+/* スマホでタップしたときに赤色が残らないようにする */
+.delete-btn:active {
+  color: #a1a5af;
+  transform: scale(0.92);
 }
 
 .empty-message {

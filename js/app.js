@@ -522,17 +522,10 @@ scheduleList.addEventListener(
         return;
       }
 
-      const shouldDelete =
-        window.confirm(
-          `「${plan.title}」を削除しますか？`
-        );
+   deletePlan(planId);
 
-      if (shouldDelete) {
-        deletePlan(planId);
-
-        renderPlans();
-        renderArchive();
-      }
+renderPlans();
+renderArchive();
 
       return;
     }
