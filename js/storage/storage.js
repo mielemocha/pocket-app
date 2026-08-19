@@ -248,20 +248,97 @@ function updatePlan(
 
 /**
  * 予定を削除する
+ *
+ * Undoで元の位置へ戻せるように、
+ * 削除した予定と元の位置を返す
  */
 function deletePlan(id) {
   const plans =
     getPlans();
 
-  const filteredPlans =
-    plans.filter(
+  const planIndex =
+    plans.findIndex(
       (plan) =>
-        plan.id !== id
+        plan.id === id
     );
 
-  savePlans(
-    filteredPlans
+  if (planIndex === -1) {
+    return null;
+  }
+
+  const deletedPlan =
+    plans[planIndex];
+
+  plans.splice(
+    planIndex,
+    1
   );
+
+  savePlans(
+    plans
+  );
+
+  return {
+    plan:
+      deletedPlan,
+
+    index:
+      planIndex
+  };
+}
+
+/**
+ * 削除した予定を
+ * 元の位置へ復元する
+ */
+function restoreDeletedPlan(
+  deletedData
+) {
+  if (
+    !deletedData ||
+    !deletedData.plan
+  ) {
+    return false;
+  }
+
+  const plans =
+    getPlans();
+
+  /*
+   * すでに同じIDが存在する場合は
+   * 二重に復元しない
+   */
+  const alreadyExists =
+    plans.some(
+      (plan) =>
+        plan.id ===
+        deletedData.plan.id
+    );
+
+  if (alreadyExists) {
+    return false;
+  }
+
+  const restoreIndex =
+    Math.min(
+      Math.max(
+        deletedData.index,
+        0
+      ),
+      plans.length
+    );
+
+  plans.splice(
+    restoreIndex,
+    0,
+    deletedData.plan
+  );
+
+  savePlans(
+    plans
+  );
+
+  return true;
 }
 
 /**

@@ -1212,3 +1212,59 @@ body.is-reordering * {
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* --------------------
+   予定削除 Undo通知
+-------------------- */
+
+.undo-toast {
+  position: fixed;
+  z-index: 950;
+
+  left: 50%;
+  bottom: calc(
+    var(--bottom-nav-height) +
+    18px
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: min(
+    calc(100% - 32px),
+    420px
+  );
+
+  gap: 20px;
+  padding: 13px 16px;
+
+  border-radius: 12px;
+
+  background: #30343b;
+  color: #ffffff;
+
+  font-size: 14px;
+
+  box-shadow:
+    0 8px 24px
+    rgba(20, 24, 35, 0.22);
+
+  transform:
+    translateX(-50%);
+}
+
+.undo-delete-button {
+  flex: 0 0 auto;
+
+  padding: 4px 0;
+
+  border: none;
+  background: transparent;
+
+  color: #aebfff;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}

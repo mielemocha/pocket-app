@@ -38,6 +38,15 @@ const appSubtitle =
     "app-subtitle"
   );
 
+const undoToast =
+  document.getElementById(
+    "undo-toast"
+  );
+
+const undoDeleteButton =
+  document.getElementById(
+    "undo-delete-button"
+  );
 
 let currentView = "pocket";
 
@@ -48,6 +57,9 @@ let draggedPointerId = null;
 let dragStartY = 0;
 let hasDragged = false;
 let suppressPlanClick = false;
+
+let lastDeletedPlanData = null;
+let undoTimerId = null;
 
 /**
  * 予定一覧を表示する
@@ -470,6 +482,74 @@ document.addEventListener(
 );
 
 /**
+ * Undo通知を隠す
+ */
+function hideUndoToast() {
+  undoToast.classList.add(
+    "hidden"
+  );
+
+  if (undoTimerId) {
+    window.clearTimeout(
+      undoTimerId
+    );
+
+    undoTimerId = null;
+  }
+}
+
+/**
+ * Undo通知を表示する
+ */
+function showUndoToast() {
+  hideUndoToast();
+
+  undoToast.classList.remove(
+    "hidden"
+  );
+
+  undoTimerId =
+    window.setTimeout(
+      () => {
+        hideUndoToast();
+
+        lastDeletedPlanData =
+          null;
+      },
+      5000
+    );
+}
+
+/**
+ * 削除した予定を復元する
+ */
+undoDeleteButton.addEventListener(
+  "click",
+  () => {
+    if (!lastDeletedPlanData) {
+      hideUndoToast();
+
+      return;
+    }
+
+    const restored =
+      restoreDeletedPlan(
+        lastDeletedPlanData
+      );
+
+    if (restored) {
+      renderPlans();
+      renderArchive();
+    }
+
+    lastDeletedPlanData =
+      null;
+
+    hideUndoToast();
+  }
+);
+
+/**
  * 予定追加
  */
 addButton.addEventListener(
@@ -516,16 +596,25 @@ scheduleList.addEventListener(
         deleteButton.dataset.id;
 
       const plan =
-        getPlanById(planId);
+        getPlanById(
+          planId
+        );
 
       if (!plan) {
         return;
       }
 
-   deletePlan(planId);
+      lastDeletedPlanData =
+        deletePlan(
+          planId
+        );
 
-renderPlans();
-renderArchive();
+      renderPlans();
+      renderArchive();
+
+      if (lastDeletedPlanData) {
+        showUndoToast();
+      }
 
       return;
     }
@@ -599,6 +688,7 @@ function convertPhotoToDataUrl(file) {
     (resolve, reject) => {
       if (!file) {
         resolve("");
+
         return;
       }
 
@@ -628,7 +718,8 @@ function convertPhotoToDataUrl(file) {
           image.addEventListener(
             "load",
             () => {
-              const maxSize = 900;
+              const maxSize =
+                900;
 
               let width =
                 image.naturalWidth;
@@ -834,7 +925,6 @@ archiveNavButton.addEventListener(
     );
   }
 );
-
 
 /**
  * 初期表示

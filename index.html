@@ -27,7 +27,7 @@
   >
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=10">
 <link rel="stylesheet" href="css/fab.css?v=2">
 </head>
 
@@ -275,6 +275,26 @@
     </button>
   </nav>
 
+    <!-- 予定削除 Undo通知 -->
+  <div
+    id="undo-toast"
+    class="undo-toast hidden"
+    role="status"
+    aria-live="polite"
+  >
+    <span>
+      予定を削除しました
+    </span>
+
+    <button
+      id="undo-delete-button"
+      class="undo-delete-button"
+      type="button"
+    >
+      復元する
+    </button>
+  </div>
+
   <!-- 予定・記録 共通モーダル -->
   <div
     id="modal-bg"
@@ -515,7 +535,7 @@
   >
 
   <!-- JavaScript -->
-  <script src="js/storage/storage.js?v=10"></script>
+  <script src="js/storage/storage.js?v=11"></script>
 <script src="js/modal/modal.js?v=9"></script>
  <script src="js/archive/archive-tabs.js?v=1"></script>
  <script src="js/archive/archive-filter.js?v=1"></script>
@@ -524,6 +544,6 @@
  <script src="js/settings/settings.js?v=1"></script> 
   <script src="js/settings/backup.js?v=1"></script>
  <script src="js/settings/import.js?v=2"></script>
-  <script src="js/app.js?v=11"></script>
+  <script src="js/app.js?v=12"></script>
 </body>
 </html>
